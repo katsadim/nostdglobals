@@ -34,7 +34,7 @@ that it was about time to take matters into my own hands and create this tool. H
 
 ## Support
 
-For now this linter only reports http.DefaultClient and DefaultTransport. More to come soon!
+For now this linter only reports http.DefaultClient and http.DefaultTransport. More to come soon!
 
 ## Scan popular projects
 
