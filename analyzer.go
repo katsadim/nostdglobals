@@ -1,7 +1,8 @@
-package analyzer
+package nostdglobals
 
 import (
 	"go/ast"
+
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -32,19 +33,19 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	insp.Preorder(nodeFilter, func(node ast.Node) {
 		selExpr, _ := node.(*ast.SelectorExpr)
 
-		x, ok := selExpr.X.(*ast.Ident)
+		expr, ok := selExpr.X.(*ast.Ident)
 		if !ok {
 			return
 		}
 
-		varNames, found := restrictedGlobals[x.Name]
+		varNames, found := restrictedGlobals[expr.Name]
 		if !found {
 			return
 		}
 
 		for _, varName := range varNames {
 			if varName == selExpr.Sel.Name {
-				pass.Reportf(node.Pos(), "should not make use of '%s.%s'", x.Name, varName)
+				pass.Reportf(node.Pos(), "should not make use of '%s.%s'", expr.Name, varName)
 			}
 		}
 	})
